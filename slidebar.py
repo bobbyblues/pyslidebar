@@ -1,15 +1,39 @@
 import serial
+import threading
+import time
 
 class SlideBar:
 
 	def __init__(self, port):
 		self.ser = serial.Serial(port,  115200)
+
 		# Trying to read the ID — somehow that fails
 		# self.ser.read_all()
 		# self.ser.write("2424]".encode("ascii"))
 		# pos = self.ser.readline() # It seems the slider sends its position first
 		# self.id = self.ser.readline() # Then we can read the ID
 		# print("Slidebar ID:", self.id)
+
+		# Centering the slider
+		self.setPosition(0.5)
+		self.last_pos = 0.5
+
+		# Starting a reader thread that will read the slidebar output constantly
+		self.periodic_thread = threading.Thread(target = self.reader)
+		self.periodic_thread.start()
+
+	def reader(self):
+		while(True):
+			read_bytes = self.ser.read_all()
+			read_str = read_bytes.decode("ascii")
+			read_values = read_str.split("\r\n")
+			if len(read_values) > 1:
+				last_pos = read_values[-2]
+				last_pos_float = float(last_pos) / 1023.0
+				self.last_pos = last_pos_float
+			time.sleep(1. / 60.)
+
+
 
 	def setPosition(self, position):
 		'''
