@@ -5,18 +5,18 @@ import time
 class SlideBar:
 
 	def __init__(self, port):
+
 		self.ser = serial.Serial(port,  115200)
 
-		# Trying to read the ID — somehow that fails
-		# self.ser.read_all()
-		# self.ser.write("2424]".encode("ascii"))
-		# pos = self.ser.readline() # It seems the slider sends its position first
-		# self.id = self.ser.readline() # Then we can read the ID
-		# print("Slidebar ID:", self.id)
+		# Waiting for the slider to initialize
+		time.sleep(2)
 
 		# Centering the slider
-		self.setPosition(0.5)
+		self.vibrate(3)
 		self.last_pos = 0.5
+		self.setPosition(0.5)
+		self.ID = 'NONE'
+		self.ser.write("2424]".encode("ascii")) # The reader thread will pick up the new ID as soon as it has been sent back
 
 		# Starting a reader thread that will read the slidebar output constantly
 		self.periodic_thread = threading.Thread(target = self.reader)
@@ -27,10 +27,14 @@ class SlideBar:
 			read_bytes = self.ser.read_all()
 			read_str = read_bytes.decode("ascii")
 			read_values = read_str.split("\r\n")
-			if len(read_values) > 1:
-				last_pos = read_values[-2]
-				last_pos_float = float(last_pos) / 1023.0
-				self.last_pos = last_pos_float
+			for value in read_values:
+				if len(value) == 5:
+					# We are reading the ID
+					self.ID = value
+				elif len(value) > 0:
+					# We are reading a position
+					pos_float = float(value) / 1023.0
+					self.last_pos = pos_float
 			time.sleep(1. / 60.)
 
 
@@ -49,11 +53,16 @@ class SlideBar:
 	def vibrate(self, time):
 		'''
 		Makes the slidebar vibrate for a given amount of time.
-		@param time: vibration time in arduino cycles between 0 and 999 where 
+		@param time: vibration time in arduino cycles between 0 and 999
 		'''
 		if (time >= 0 and time <= 999):
 			str_time = str(time).zfill(3)
 			str_vibrate = "6" + str_time + "]"
 			self.ser.write(str_vibrate.encode("ascii"))
 
+	def getPosition(self):
+		return self.last_pos
 
+
+	def getID(self):
+		return self.ID
