@@ -9,6 +9,15 @@ Python 3 implementation of the [slidekb](https://slidekb.com/) software.
     sb.setPosition(0.5) # Sets the slidebar in the center
     sb.vibrate(20) # Makes the slidebar vibrate for 20 arduino cycles
 
+# Typewriter module
+
+For this module to work, we use the pyxhook library from [JeffHoogland](https://github.com/JeffHoogland/pyxhook).
+Those files are provided under the license specified in the pyxhook subdirectory.
+
+Simply launch the module, and start typing.
+
+There is currently a bug where the slider will move big spaces to the right, I am still not sure why.
+
 # SlideBar as a volume control
 
 For this module to work, you need to use pulseaudio, and have pulseaudio-ctl installed.
