@@ -1,6 +1,6 @@
 # pyslidebar
 
-Python 3 implementation of the slidekb software.
+Python 3 implementation of the [slidekb](https://slidekb.com/) software.
 
 # Example of use
 
