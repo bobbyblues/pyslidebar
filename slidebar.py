@@ -92,4 +92,3 @@ class SlideBar:
 		if new_pos < 0.0:
 			new_pos = 0.0
 		self.setPosition(new_pos)
-
