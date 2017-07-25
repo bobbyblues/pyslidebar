@@ -29,8 +29,9 @@ class SlideBar:
 			read_str = read_bytes.decode("ascii")
 			read_values = read_str.split("\r\n")
 			for value in read_values:
-				if len(value) == 5:
-					# We are reading the ID
+				if 'l' in value:
+					# It seems that slidebarID follow the format l[0-9]n[0-9]+
+					# By checking if it contains a 'l', we know if we are reading the ID
 					self.ID = value
 				elif len(value) > 1:
 					# Debug
