@@ -29,7 +29,7 @@ class SlideBar:
 			read_str = read_bytes.decode("ascii")
 			read_values = read_str.split("\r\n")
 			for value in read_values:
-				if len(value) == 5:
+				if len(value) > 4: 
 					# We are reading the ID
 					self.ID = value
 				elif len(value) > 1:
@@ -37,8 +37,7 @@ class SlideBar:
 					try:
 						tmp = float(value)
 					except Exception as e:
-						print("Error when converting value:", value)					
-					# We are reading a position
+						print("Error when converting value:", value)
 					pos_float = float(value) / 1023.0
 					if self.reversed:
 						self.last_pos = 1.0 - pos_float
