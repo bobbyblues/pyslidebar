@@ -2,6 +2,7 @@ import subprocess
 from subprocess import PIPE
 import threading
 import time
+import os, sys
 
 class Volume:
 
@@ -11,11 +12,13 @@ class Volume:
     def init(self):
         # We specify that we started
         self.running = True
+
         # We get the current level
-        command = ["pulseaudio-ctl", "full-status"]
+        command = ["./plugins/getVolume.sh"]
         a = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
         (cout, cerr) = a.communicate()
-        self.curr_volume = int(cout.decode("ascii").split(" ")[0])
+        self.curr_volume = int(cout.strip())
+
         # We set the slider at the proper position
         curr_position = min(float(self.curr_volume) / 100.0, 1.0)
         self.sb.setPosition(curr_position) # We set the slider position according to the current volume (but not more than 100%)
@@ -23,6 +26,7 @@ class Volume:
         # We wait for the slider to be at the righ position
         while abs(self.sb.getPosition() - curr_position) > 0.01:
             time.sleep(1. / 60.)
+
 
         self.periodic_thread = threading.Thread(target = self.update)
         self.periodic_thread.start()
@@ -40,10 +44,7 @@ class Volume:
         command = ["pactl", "set-sink-volume", "0", str(int(volume)) + "%"]
         a = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
         (cout, cerr) = a.communicate()
-        print cout
-        print cerr
         self.curr_volume = volume
-        print command
 
     def update(self):
         while True:
@@ -52,7 +53,7 @@ class Volume:
             # We check if the position of the slider changed:
             new_position = self.sb.getPosition()
             new_volume = new_position * 100.0
-            
+
             if new_volume < 2.0 and self.curr_volume != 0.0:
                 self.setVolume(0.0)
 
