@@ -38,8 +38,7 @@ class SlideBar:
 					try:
 						tmp = float(value)
 					except Exception as e:
-						print("Error when converting value:", value)					
-					# We are reading a position
+						print("Error when converting value:", value)
 					pos_float = float(value) / 1023.0
 					if self.reversed:
 						self.last_pos = 1.0 - pos_float
