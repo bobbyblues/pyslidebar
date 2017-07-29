@@ -61,7 +61,7 @@ class Volume:
 
 
     def setVolume(self, volume):
-        command = ["pactl", "set-sink-volume", "2", str(int(volume)) + "%"]
+        command = ["pactl", "set-sink-volume", self.sink, str(int(volume)) + "%"]
         a = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
         (cout, cerr) = a.communicate()
         self.curr_volume = volume

@@ -33,6 +33,8 @@ For a simple start, you can use the sample configuration file provided:
 
 	mv config-sample.json config.json
 
+Note that it is up to the user to make sure that no conflicts exist due to different modules using the same activating keys.
+
 # Typewriter module
 
 This module is the default one, running when no other is.
@@ -44,7 +46,7 @@ Those files are provided under the license specified in the pyxhook subdirectory
 
 Configuration:
 
- - typewriter: true or false to enable or disable the typewriter module
+ - enabled: true or false to enable or disable the typewriter module
 
 Known bugs:
 
@@ -67,6 +69,6 @@ Know that this module works with pulseaudio only, and requires for pulseaudio-ct
 
 Configuration:
 
- - volume: true or false to enable or disable the volume module
- - volume-modifier: ascii code of the key that will trigger the volume module
- - volume-sink: index of the pulse-audio sink you want the volume module to control
+ - enabled: true or false to enable or disable the volume module
+ - modifier: ascii code of the key that will trigger the volume module
+ - sink: index of the pulse-audio sink you want the volume module to control

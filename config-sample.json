@@ -1,7 +1,16 @@
 {
 	"slidebar":"/dev/ttyUSB0",
-	"typewriter":true,
-	"volume":true,
-	"volume-modifier":235,
-	"volume-sink":0
+	"plugins":
+	[
+		{
+			"name":"typewriter",
+			"enabled":true
+		},
+		{
+			"name":"volume",
+			"enabled":true,
+			"modifier":235,
+			"sink":2
+		}
+	]
 }

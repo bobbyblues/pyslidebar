@@ -13,61 +13,111 @@ class Manager:
 		config = json.load(open("config.json",'r'))
 
 		self.slidebar_device = config["slidebar"]
-		self.has_typewriter = config["typewriter"]
-		self.has_volume = config["volume"]
-		self.volume_modifier = config["volume-modifier"]
-		self.volume_sink = config["volume-sink"]
 
 		# Creating the slidebar
 		self.sb = slidebar.SlideBar(self.slidebar_device)
 		self.sb.reverse()
 		self.sb.setPosition(0.0)
 
-		# Creating the plugins
-		if self.has_typewriter:
-			self.typewriter = typewriter.TypeWriter(self.sb)
-			self.typewriter.init()
+		# We start we no modules
+		self.do_typewriter = False
+		self.typewriter_is_running = False
+		self.modules = [] # Existing modules
+		self.modules_modifier = [] # Modifiers keys activating modules
+		self.modules_running = [] # Boolean to know if a module is running
 
-		if self.has_volume:
-			self.volume = volume.Volume(self.sb, self.volume_sink)
+		# To keep track of keys currently pressed
+		self.pressed_keys = []
 
-		# Booleans to know which plugins are active
-		self.is_active_typewriter = True
-		self.is_active_volume = False
+		# Loading modules
+		for module in config["plugins"]:
+			self.loadModule(module)
 
 
 	def keydown(self, event):
-		# We check if the key down is one of the modifiers
-		if event.Ascii == self.volume_modifier and self.has_volume:
-			self.is_active_volume = True
-			self.is_active_typewriter = False
-			if self.has_typewriter:
-				self.typewriter.stop()
-			self.volume.init()
+		# We append the key to the keys currently being pressed
+		if event.Ascii not in self.pressed_keys:
+			self.pressed_keys.append(event.Ascii)
 
-		# We send the event to the proper plugin
-		if self.has_typewriter and self.is_active_typewriter:
+		# We check if any module needs to start
+		for i in range(len(self.modules)):
+			key = self.modules_modifier[i]
+			running = self.modules_running[i]
+			# If that module has its key down and is not already running
+			if key in self.pressed_keys and not running:
+				# We stop the typewriter if any
+				if self.typewriter_is_running:
+					self.typewriter.stop()
+					self.typewriter_is_running = False
+				# We indicate that the module is running
+				self.modules_running[i] = True
+				# We start the module
+				self.modules[i].init()
+
+		# Finally we send the key event to the appropriate modules
+		for i in range(len(self.modules)):
+			if self.modules_running[i]:
+				self.modules[i].keydown(event)
+
+		if self.typewriter_is_running:
 			self.typewriter.keydown(event)
 
-		if self.has_volume and self.is_active_volume:
-			self.volume.keydown(event)
 
 	def keyup(self, event):
-		# We check if the key up is one of the modifiers
-		if event.Ascii == self.volume_modifier and self.is_active_volume:
-			self.is_active_volume = False
-			self.is_active_typewriter = True
-			if self.has_volume:
-				self.volume.stop()
-			if self.has_typewriter:
-				self.typewriter.init()
+		# We remove the key from the list of keys being pressed
+		if event.Ascii in self.pressed_keys:
+			self.pressed_keys.remove(event.Ascii)
 
-		# We send the event to the proper plugin
-		if self.has_typewriter and self.is_active_typewriter:
+		# We check if any module needs to stop
+		for i in range(len(self.modules)):
+			key = self.modules_modifier[i]
+			running = self.modules_running[i]
+			# If that module is running but its key is not pressed anymore
+			if running and key not in self.pressed_keys:
+				# We stop the module
+				self.modules[i].stop()
+				self.modules_running[i] = False
+
+		# We check if we need to start the typewriter module again
+		if self.do_typewriter and not self.typewriter_is_running and True not in self.modules_running:
+			self.typewriter_is_running = True
+			self.typewriter.init()
+
+		# Finally we send the key event to the appropriate modules
+		for i in range(len(self.modules)):
+			if self.modules_running[i]:
+				self.modules[i].keyup(event)
+
+		if self.typewriter_is_running:
 			self.typewriter.keyup(event)
 
-		if self.has_volume and self.is_active_volume:
-			self.volume.keyup(event)
+
+
+	def loadModule(self, module):
+		if not module["enabled"]:
+			return
+
+		module_name = module["name"]
+
+		if module_name == "typewriter":
+			self.do_typewriter = True
+			if self.do_typewriter:
+				self.typewriter = typewriter.TypeWriter(self.sb)
+				self.typewriter_is_running = True
+				self.typewriter.init()
+
+		elif module_name == "volume":
+			# Reading parameters
+			volume_sink = module["sink"]
+			volume_modifier = module["modifier"]
+
+			# Initializing module
+			self.modules.append(volume.Volume(self.sb, volume_sink))
+			self.modules_modifier.append(volume_modifier)
+			self.modules_running.append(False)
+
+		else:
+			print("Unknown module:", module)
 
 
 def kbevent_down(event):
