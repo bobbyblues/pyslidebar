@@ -55,7 +55,7 @@ class Volume:
         a = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
         (cout, cerr) = a.communicate()
 
-        volume = int(cout.decode("ascii").split("SINK #" + str(self.sink))[-1].split('/ ')[1].split('%')[0])
+        volume = int(cout.decode("ascii").split("Sink #" + str(self.sink))[-1].split('/ ')[1].split('%')[0])
 
         return volume
 
