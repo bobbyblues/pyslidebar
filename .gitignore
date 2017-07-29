@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# To prevent people from pushing their own configuration files
+config.json
