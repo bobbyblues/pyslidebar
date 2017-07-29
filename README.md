@@ -25,9 +25,13 @@ The slidebar.py class can be used to control the slidebar from other scripts, fo
     sb.vibrate(20) # Makes the slidebar vibrate for 20 arduino cycles
 
 The software also comes with a set of modules and a module manager.
-Those can be configured through the `config.json` file, and the manager launched as:
+Those can be configured through a `config.json` file, and the manager launched as:
 
     python manager.py
+
+For a simple start, you can use the sample configuration file provided:
+
+	mv config-sample.json config.json
 
 # Typewriter module
 
@@ -37,6 +41,10 @@ To enable or disable that module, change the value of the `typewriter` entry in 
 
 For this module to work, we use the pyxhook library from [JeffHoogland](https://github.com/JeffHoogland/pyxhook).
 Those files are provided under the license specified in the pyxhook subdirectory.
+
+Configuration:
+
+ - typewriter: true or false to enable or disable the typewriter module
 
 Known bugs:
 
@@ -55,3 +63,10 @@ To change which key is triggering this module, change the value of the `volume-m
 The value should be the ascii value of the key you wish to use.
 
 Know that this module works with pulseaudio only, and requires for pulseaudio-ctl to be installed.
+
+
+Configuration:
+
+ - volume: true or false to enable or disable the volume module
+ - volume-modifier: ascii code of the key that will trigger the volume module
+ - volume-sink: index of the pulse-audio sink you want the volume module to control

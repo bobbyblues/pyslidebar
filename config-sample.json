@@ -2,5 +2,6 @@
 	"slidebar":"/dev/ttyUSB0",
 	"typewriter":true,
 	"volume":true,
-	"volume-modifier":235
+	"volume-modifier":235,
+	"volume-sink":0
 }

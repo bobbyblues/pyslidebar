@@ -16,6 +16,7 @@ class Manager:
 		self.has_typewriter = config["typewriter"]
 		self.has_volume = config["volume"]
 		self.volume_modifier = config["volume-modifier"]
+		self.volume_sink = config["volume-sink"]
 
 		# Creating the slidebar
 		self.sb = slidebar.SlideBar(self.slidebar_device)
@@ -28,7 +29,7 @@ class Manager:
 			self.typewriter.init()
 
 		if self.has_volume:
-			self.volume = volume.Volume(self.sb)
+			self.volume = volume.Volume(self.sb, self.volume_sink)
 
 		# Booleans to know which plugins are active
 		self.is_active_typewriter = True
