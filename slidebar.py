@@ -72,28 +72,54 @@ class SlideBar:
 			self.ser.write(str_vibrate.encode("ascii"))
 
 	def getPosition(self):
+		'''
+		Returns the position of the slider between 0.0 and 1.0
+		'''
 		return self.last_pos
 
 
 	def getID(self):
+		'''
+		Returns the ID of the slider (or "NONE" if it has not been read already)
+		'''
 		return self.ID
 
-	def reverse(self, reversed=True):
+	def setReverse(self, reversed=True):
+		'''
+		Allows to change the orientation of the slider
+		@param reversed: slider is reversed if parameter is set to True, normal otherwise
+		'''
 		self.reversed = reversed
 
 	def moveRight(self, steps = 1, step_size = 0.02):
+		'''
+		Moves the slider one or more steps to the right
+		@param steps: number of steps to move
+		@param step_size: size of the step (anything less than 0.02 will have no effect)
+		'''
 		new_pos = self.last_pos + steps * step_size
 		if new_pos > 1.0:
 			new_pos = 1.0
 		self.setPosition(new_pos)
 
 	def moveLeft(self, steps = 1, step_size = 0.02):
+		'''
+		Moves the slider one or more steps to the left
+		@param steps: number of steps to move
+		@param step_size: size of the step (anything less than 0.02 will have no effect)
+		'''
 		new_pos = self.last_pos - steps * step_size
 		if new_pos < 0.0:
 			new_pos = 0.0
 		self.setPosition(new_pos)
 
 	def createParts(self, number_of_parts):
+		'''
+		Create parts in the slider:
+		 - the slider will automatically be at the center of a part
+		 - the slider will offer resistance when trying to move from one part to the other
+		@param number_of_patrs: number of parts to be created between 0 and 50 (0 makes the slider go back to "normal" mode)
+		'''
 		if number_of_parts > 50:
 			print("[ERROR] Cannot have more than 50 parts")
 		if number_of_parts < 0:

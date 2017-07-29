@@ -16,7 +16,7 @@ class Manager:
 
 		# Creating the slidebar
 		self.sb = slidebar.SlideBar(self.slidebar_device)
-		self.sb.reverse()
+		self.sb.setReverse()
 		self.sb.setPosition(0.0)
 
 		# We start we no modules
