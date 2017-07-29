@@ -38,7 +38,7 @@ class SlideBar:
 					try:
 						tmp = float(value)
 					except Exception as e:
-						print("Error when converting value:", value)
+						print("[ERROR] When converting value:", value)
 					pos_float = float(value) / 1023.0
 					if self.reversed:
 						self.last_pos = 1.0 - pos_float
@@ -81,14 +81,29 @@ class SlideBar:
 	def reverse(self, reversed=True):
 		self.reversed = reversed
 
-	def moveRight(self, steps = 1, stepsize = 0.02):
-		new_pos = self.last_pos + steps * stepsize
+	def moveRight(self, steps = 1, step_size = 0.02):
+		new_pos = self.last_pos + steps * step_size
 		if new_pos > 1.0:
 			new_pos = 1.0
 		self.setPosition(new_pos)
 
-	def moveLeft(self, steps = 1, stepsize = 0.02):
-		new_pos = self.last_pos - steps * stepsize
+	def moveLeft(self, steps = 1, step_size = 0.02):
+		new_pos = self.last_pos - steps * step_size
 		if new_pos < 0.0:
 			new_pos = 0.0
 		self.setPosition(new_pos)
+
+	def createParts(self, number_of_parts):
+		if number_of_parts > 50:
+			print("[ERROR] Cannot have more than 50 parts")
+		if number_of_parts < 0:
+			print("[ERROR] Number of parts needs to be at least 0")
+
+		str_pos = str(2000 + number_of_parts)
+		str_createParts = str_pos + "]"
+		self.ser.write(str_createParts.encode("ascii"))
+
+	def removeParts(self):
+		self.createParts(0)
+
+
