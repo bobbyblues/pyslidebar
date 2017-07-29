@@ -44,11 +44,11 @@ To enable or disable that module, change the value of the `typewriter` entry in 
 For this module to work, we use the pyxhook library from [JeffHoogland](https://github.com/JeffHoogland/pyxhook).
 Those files are provided under the license specified in the pyxhook subdirectory.
 
-Configuration:
+### Configuration:
 
  - enabled: true or false to enable or disable the typewriter module
 
-Known bugs:
+### Known bugs:
 
  - Sometimes the slider moves all the way to the right instead of doing only one step, I don't know why yet
 
@@ -66,8 +66,11 @@ The value should be the ascii value of the key you wish to use.
 
 Know that this module works with pulseaudio only, and requires for pulseaudio-ctl to be installed.
 
+### Requires:
+ - PulseAudio
+ - pactl
 
-Configuration:
+### Configuration:
 
  - enabled: true or false to enable or disable the volume module
  - modifier: ascii code of the key that will trigger the volume module
