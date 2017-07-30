@@ -11,6 +11,11 @@
 			"enabled":true,
 			"modifier":235,
 			"sink":2
+		},
+		{
+			"name":"scroll",
+			"enabled":true,
+			"modifier":233
 		}
 	]
 }

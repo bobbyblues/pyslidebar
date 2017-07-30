@@ -3,6 +3,7 @@ from pyxhook import pyxhook
 import slidebar
 import time
 
+from plugins import scroll
 from plugins import typewriter
 from plugins import volume
 
@@ -114,6 +115,15 @@ class Manager:
 			# Initializing module
 			self.modules.append(volume.Volume(self.sb, volume_sink))
 			self.modules_modifier.append(volume_modifier)
+			self.modules_running.append(False)
+
+		elif module_name == "scroll":
+			# Reading parameters
+			scroll_modifier = module["modifier"]
+
+			# Initializing module
+			self.modules.append(scroll.Scroll(self.sb))
+			self.modules_modifier.append(scroll_modifier)
 			self.modules_running.append(False)
 
 		else:

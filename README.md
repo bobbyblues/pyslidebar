@@ -35,6 +35,20 @@ For a simple start, you can use the sample configuration file provided:
 
 Note that it is up to the user to make sure that no conflicts exist due to different modules using the same activating keys.
 
+# Scroll module
+
+This module is largely inspired by [/u/snortwolf's](https://www.reddit.com/r/SlideBar/comments/6ojf21/small_python_software_for_linux/dkkv9ek/) script from reddit.
+It makes the slider acts as a slider.
+The further you move it from the center, the faster it scrolls, and the slider automatically centers when you release it.
+
+### Requires:
+ - [PyMouse from PyUserInput](https://github.com/SavinaRoja/PyUserInput)
+
+### Configuration:
+
+ - enabled: true or false to enable or disable the scroll module
+ - modifier: ascii code of the key that will trigger the scroll module
+
 # Typewriter module
 
 This module is the default one, running when no other is.
@@ -57,14 +71,7 @@ Those files are provided under the license specified in the pyxhook subdirectory
 This module allows to control the volume using the slider.
 By default, pressing the left windows key will set the slider at a position corresponding to the current volume (0% being all the way to the left, and 100% all the way to the right).
 Moving the slider while still holding the windows key will change the volume accordingly.
-
-To enable or disable that module, change the value of the `volume` entry in the `config.json` file.
-
-
-To change which key is triggering this module, change the value of the `volume-modifier` entry in the `config.json` file.
-The value should be the ascii value of the key you wish to use.
-
-Know that this module works with pulseaudio only, and requires for pulseaudio-ctl to be installed.
+Know that this module works with pulseaudio only, and requires for pactl to be installed.
 
 ### Requires:
  - PulseAudio
